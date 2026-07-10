@@ -381,4 +381,6 @@ MIT License
 
 ## Author
 
+**Belio C. Sinangote**
+
 Built with **n8n + Google Gemini AI** to demonstrate a complete AI-driven content creation and distribution pipeline.

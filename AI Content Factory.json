@@ -1,0 +1,463 @@
+{
+  "name": "AI Content Factory",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -384,
+        0
+      ],
+      "id": "55862e4e-924b-4061-aaed-448d1e0b64bb",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/TechCrunch",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        0
+      ],
+      "id": "29600f15-1d6b-489a-802d-482104410799",
+      "name": "Get Trending Topics"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5605a3f5-9357-41df-b945-5948965bef42",
+              "name": "title",
+              "value": "={{$json.title}}",
+              "type": "string"
+            },
+            {
+              "id": "d31a886e-84a4-4b36-80d3-5bc2076fb1c0",
+              "name": "content",
+              "value": "={{$json.contentSnippet}}",
+              "type": "string"
+            },
+            {
+              "id": "1665a0a8-5cfa-400b-a21d-b77ef2d85ac1",
+              "name": "url",
+              "value": "={{$json.link}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        32,
+        0
+      ],
+      "id": "c48f2ab4-129d-4292-a1c7-5ad27ed1e7e2",
+      "name": "Extract Article"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        128
+      ],
+      "id": "e1d4b631-3511-4523-9658-9f28e4a25857",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "p6aCPHm0mKzknowX",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this article:\n\nTitle:\n{{ $json.title }}\n\nContent:\n{{ $json.content }}\n\nSource URL:\n{{ $json.url }}\n\nProvide:\n\n1. Short summary (3–5 sentences)\n2. Key points (bullet list)\n3. Important facts or data\n4. Why this topic matters\n5. Possible angles for a blog post",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a professional research assistant and content analyst.  Your job is to extract useful information from articles and prepare structured insights for a blog writer.  Rules: - Focus only on important and relevant information - Ignore fluff or irrelevant details - Extract key facts, trends, and insights - Summarize clearly and concisely - Do NOT write a blog post - Do NOT add opinions unless clearly implied by the text - Output structured notes for a writer to use"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        240,
+        0
+      ],
+      "id": "669d60c8-fcec-4105-92c6-6534a808da0b",
+      "name": "Research Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write a 1000-word SEO blog article.\n\nTopic:\n{{ $('Set').item.json.title }}\n\nResearch Summary:\n{{ $node[\"Node 4\"].json.output }}\n\nRequirements:\n- 1000 words\n- SEO optimized\n- Use headings (H1, H2)\n- Include introduction and conclusion\n- Add call to action at the end\n- Output in Markdown",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a professional SEO blog writer.  You write clear, engaging, and well-structured articles that are optimized for search engines.  Rules: - Always use proper Markdown formatting - Always include H1 title and H2 headings - Keep tone informative but engaging - Make content easy to read - Focus on SEO keywords naturally - End with a strong conclusion and call to action"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        592,
+        0
+      ],
+      "id": "6955ee67-71dd-4326-a48e-3dffdbf48384",
+      "name": "Blog Writer"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        608,
+        128
+      ],
+      "id": "ebe163ca-6738-4b0f-bf29-635726af0131",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "p6aCPHm0mKzknowX",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create a professional AI image generation prompt based on the following blog article.\n\nTitle:\n{{ $('Set').item.json.title }}\n\nArticle:\n{{ $node[\"Node 5\"].json.text }}\n\nRequirements:\n\n- Create a realistic and engaging blog cover image.\n- Highlight the article's main idea.\n- Use cinematic lighting.\n- Modern professional style.\n- High detail.\n- Suitable for social media sharing.\n- No text inside the image.\n\nReturn only the final image prompt.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        944,
+        0
+      ],
+      "id": "a5a2d774-f0fb-485f-97a7-eebef09aefa7",
+      "name": "Image Prompt Generator"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        944,
+        112
+      ],
+      "id": "ce4ed9d2-1825-4a6c-b254-d758ffb6bec6",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "p6aCPHm0mKzknowX",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1712,
+        128
+      ],
+      "id": "819f24af-f14e-4c91-b332-e71f9dcc23cd",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "p6aCPHm0mKzknowX",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create social media posts based on this blog article.\n\nTitle:\n{{ $('Set').item.json.title }}\n\nArticle:\n{{ $node[\"Node 5\"].json.text }}\n\nRequirements:\n\n- Facebook: 100-200 words\n- LinkedIn: professional tone\n- Twitter/X: maximum 280 characters\n- Telegram: short summary with call-to-action",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1712,
+        0
+      ],
+      "id": "39590fd5-94b4-4d61-b256-ef7be0e63231",
+      "name": "Social Media Content Generator"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2064,
+        0
+      ],
+      "id": "f65a9679-c0bf-420b-a9c2-61658fe1c13c",
+      "name": "Publish Notification",
+      "webhookId": "2ec7f388-cd35-4dfa-a37f-b215825746dc",
+      "credentials": {
+        "telegramApi": {
+          "id": "MqGIngOnMC2S6ph4",
+          "name": "Send Job Alert"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Generated Image Result",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1504,
+        0
+      ],
+      "id": "c3fcabf7-08b9-4f49-8272-fd3ba9bf31db",
+      "name": "Save Blog",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "R5oxNJuHdX581URy",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-image",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-image (Nano Banana)"
+        },
+        "prompt": "={{ $node[\"Node 6\"].json.output }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        1296,
+        0
+      ],
+      "id": "75ad2fa2-6354-4b45-878e-f06edac46322",
+      "name": "Image Generator",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "p6aCPHm0mKzknowX",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Trending Topics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Trending Topics": {
+      "main": [
+        [
+          {
+            "node": "Extract Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Article": {
+      "main": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent": {
+      "main": [
+        [
+          {
+            "node": "Blog Writer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Blog Writer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Blog Writer": {
+      "main": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompt Generator": {
+      "main": [
+        [
+          {
+            "node": "Image Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Social Media Content Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Social Media Content Generator": {
+      "main": [
+        [
+          {
+            "node": "Publish Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Blog": {
+      "main": [
+        [
+          {
+            "node": "Social Media Content Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Generator": {
+      "main": [
+        [
+          {
+            "node": "Save Blog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8af6e40b-e55f-4387-a5c5-ccda619d1ddd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8109642ab6846a9cf1618de304921f5663481ec8cdaee6a52dd360d6de75a743"
+  },
+  "id": "8wT6itEUKozPOHEI",
+  "tags": []
+}

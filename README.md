@@ -1,171 +1,506 @@
-# 🚀 AI Content Factory with n8n
+# 🚀 AI Content Factory — n8n Automation
 
-## 📌 Project Overview
+![n8n](https://img.shields.io/badge/n8n-Automation-orange)
+![Google Gemini](https://img.shields.io/badge/AI-Google%20Gemini-blue)
+![Google Drive](https://img.shields.io/badge/Storage-Google%20Drive-green)
+![JavaScript](https://img.shields.io/badge/Code-JavaScript-yellow)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-AI Content Factory is an end-to-end content automation workflow built with **n8n**, **Google Gemini AI**, **Google Drive**, **RSS Feeds**, and **Telegram**. It automatically discovers trending articles, performs AI-powered research, generates SEO-optimized blog posts, creates AI-generated cover images, produces platform-specific social media content, and distributes assets across multiple platforms.
+An end-to-end AI content automation workflow built using **n8n**, **Google Gemini AI**, **RSS Feeds**, **Google Drive**, and **Telegram Bot API**.
 
-Built as part of my **30-Day n8n Automation Portfolio**, this project demonstrates advanced AI workflow automation, content generation, multi-platform publishing, and digital content management.
+This system automatically discovers trending topics, performs AI-powered research, generates SEO-optimized blog content, creates AI-generated cover images, produces social media content, and organizes generated assets for multi-platform publishing.
 
----
+**Stack:**  
+n8n · Google Gemini AI · RSS Feed · Google Drive · Telegram Bot · JavaScript · AI Automation
 
-## 🎯 Objectives
-
-* Automate content research and creation
-* Generate SEO-optimized blog articles with AI
-* Create AI-generated cover images
-* Produce platform-specific social media content
-* Automate content distribution and storage
 
 ---
 
-## 🏗️ Workflow Architecture
+# 🎯 Project Overview
+
+
+## Problem
+
+Creating high-quality digital content requires significant time and manual effort.
+
+Common challenges include:
+
+- Finding relevant trending topics
+- Researching articles manually
+- Writing SEO-friendly blog posts
+- Creating visual assets
+- Preparing social media content
+- Managing content distribution
+
+
+For content creators and businesses, maintaining a consistent publishing workflow can become difficult.
+
+
+---
+
+## Solution
+
+This project creates an automated AI content production pipeline by:
+
+
+1. Discovering trending articles automatically
+2. Extracting article information
+3. Performing AI-powered research
+4. Generating SEO-optimized blog posts
+5. Creating AI-generated cover images
+6. Uploading assets to Google Drive
+7. Generating social media content
+8. Preparing content for distribution
+
+
+The workflow acts as an AI-powered content assistant that transforms a single article into a complete digital content package.
+
+
+---
+
+# ✨ Features
+
+
+## Content Discovery
+
+✅ Automated RSS feed monitoring  
+✅ Trending article collection  
+✅ Article data extraction  
+✅ Automated topic discovery  
+
+
+## Artificial Intelligence
+
+✅ Google Gemini AI research  
+✅ AI-generated article analysis  
+✅ SEO blog generation  
+✅ AI image prompt creation  
+✅ Social media content generation  
+
+
+## Content Management
+
+✅ Google Drive asset storage  
+✅ Organized content workflow  
+✅ Automated file management  
+✅ AI-generated content tracking  
+
+
+## Distribution
+
+✅ Platform-specific content creation  
+✅ Telegram notifications  
+✅ Multi-platform publishing preparation  
+
+
+---
+
+# 🗺️ System Architecture
+
+
+```mermaid
+flowchart TD
+
+A["⏰ Schedule Trigger"]
+
+--> B["📰 RSS Feed Reader"]
+
+--> C["⚙️ Set Article Data"]
+
+--> D["🤖 AI Research Agent"]
+
+--> E["✍️ AI Blog Writer"]
+
+--> F["🎨 AI Image Prompt Generator"]
+
+--> G["🖼️ Gemini Image Generation"]
+
+--> H["☁️ Google Drive Upload"]
+
+--> I["📱 AI Social Media Generator"]
+
+--> J["🚀 Content Distribution"]
+
+````
+
+---
+
+# 🏗️ Workflow Implementation
+
+# Workflow 1: AI Content Generation Pipeline
+
+## Node 1 — Schedule Trigger
+
+### Purpose
+
+Automatically starts the workflow based on a defined schedule.
+
+Example Configuration:
 
 ```text
-Schedule Trigger
-        │
-        ▼
-RSS Feed Reader
-        │
-        ▼
-Set Article Data
-        │
-        ▼
-AI Research Agent
-        │
-        ▼
-AI Blog Writer
-        │
-        ▼
-AI Image Prompt Generator
-        │
-        ▼
-Gemini Image Generation
-        │
-        ▼
-Google Drive Upload
-        │
-        ▼
-AI Social Media Generator
-        │
-        ▼
-Content Distribution
+Trigger:
+
+Daily
+
+
+Execution:
+
+Automatic
 ```
 
----
-
-## ⚙️ Workflow Implementation
-
-### 1. Schedule Trigger
-
-Runs the workflow automatically at a scheduled time.
+The workflow runs without manual intervention.
 
 ---
 
-### 2. RSS Feed Reader
+# Node 2 — RSS Feed Reader
 
-Retrieves trending articles from selected news sources.
+### Purpose
 
-Example sources:
+Collect trending articles from selected sources.
+
+Example Sources:
 
 * TechCrunch
 * The Verge
 * Hacker News
-* Industry-specific blogs
+* Technology blogs
+
+Captured Information:
+
+| Field   | Description         |
+| ------- | ------------------- |
+| Title   | Article title       |
+| Content | Article information |
+| URL     | Original source     |
 
 ---
 
-### 3. Set Article Data
+# Node 3 — Set Article Data
 
-Extracts and standardizes article information, including:
+### Purpose
 
-* Title
-* Content
-* Source URL
+Standardize article information before AI processing.
+
+Extracted Data:
+
+| Field      | Description           |
+| ---------- | --------------------- |
+| Title      | Article headline      |
+| Content    | Article details       |
+| Source URL | Original article link |
+
+Example:
+
+```json
+{
+"title":
+"Latest AI Technology Trends",
+
+"source":
+"Tech Blog",
+
+"url":
+"https://example.com"
+}
+```
 
 ---
 
-### 4. AI Research Agent
+# Node 4 — AI Research Agent
 
-Uses Google Gemini AI to analyze the article by:
+### Purpose
 
-* Extracting key points
-* Identifying trends
-* Summarizing content
-* Suggesting blog angles
+Analyze article information using Google Gemini AI.
+
+The AI performs:
+
+* Key point extraction
+* Trend analysis
+* Topic understanding
+* Blog angle suggestions
+* Content research
+
+Example Output:
+
+```json
+{
+"topic":
+"Artificial Intelligence",
+
+"keyPoints":
+[
+"AI adoption is increasing",
+"Automation is becoming mainstream"
+],
+
+"blogAngle":
+"How AI is changing businesses"
+}
+```
 
 ---
 
-### 5. AI Blog Writer
+# Node 5 — AI Blog Writer
 
-Generates a complete SEO-friendly blog article featuring:
+### Purpose
+
+Generate a complete SEO-optimized article.
+
+Generated Content Includes:
 
 * H1 Title
 * Introduction
 * H2 Sections
-* SEO-Optimized Structure
+* SEO Keywords
+* Main Content
 * Conclusion
-* Call-to-Action
+* Call-To-Action
+
+Example:
+
+```text
+Title:
+
+The Future of AI Automation
+
+
+Sections:
+
+Introduction
+
+AI Trends
+
+Business Impact
+
+Future Predictions
+
+Conclusion
+```
 
 ---
 
-### 6. AI Image Prompt Generator
+# Node 6 — AI Image Prompt Generator
 
-Creates a detailed prompt for AI image generation based on the blog content.
+### Purpose
+
+Create detailed image prompts based on generated blog content.
+
+The AI generates:
+
+* Visual concept
+* Style direction
+* Image composition
+* Design elements
+
+Example:
+
+```text
+A futuristic AI automation workspace,
+modern technology environment,
+digital interfaces,
+professional blog cover style.
+```
 
 ---
 
-### 7. Gemini Image Generation
+# Node 7 — Gemini Image Generation
 
-Generates a high-resolution cover image suitable for blog posts and social media.
+### Purpose
+
+Generate AI-powered visual assets for the content.
+
+Generated Assets:
+
+* Blog cover images
+* Social media visuals
+* Marketing graphics
 
 ---
 
-### 8. Google Drive Upload
+# Node 8 — Google Drive Upload
 
-Uploads generated images to Google Drive for centralized storage and easy sharing.
+### Purpose
+
+Store generated images and assets.
+
+Storage Includes:
+
+| Asset              | Purpose         |
+| ------------------ | --------------- |
+| Cover Image        | Blog article    |
+| Social Media Image | Platform posts  |
+| Generated Files    | Content archive |
 
 ---
 
-### 9. AI Social Media Generator
+# Node 9 — AI Social Media Generator
 
-Creates platform-specific posts for:
+### Purpose
+
+Create platform-specific promotional content.
+
+Generated Platforms:
 
 * Facebook
 * LinkedIn
 * X (Twitter)
 * Telegram
 
+Example Output:
+
+```text
+LinkedIn:
+
+AI automation is transforming
+the way businesses create content...
+
+
+Twitter:
+
+AI-powered workflows are changing
+digital content creation.
+```
+
 ---
 
-### 10. Content Distribution
+# Node 10 — Content Distribution
 
-Publishes or prepares content for multiple platforms using the generated assets.
+### Purpose
+
+Prepare or publish generated content across platforms.
+
+Possible Integrations:
+
+* Telegram Bot
+* LinkedIn API
+* Facebook API
+* WordPress API
 
 ---
 
-## 🛠️ Technologies Used
+# 🔐 Credentials Required
 
-* n8n
-* Google Gemini AI
-* RSS Feeds
+| Service             | Purpose            |
+| ------------------- | ------------------ |
+| Google Gemini API   | AI generation      |
+| RSS Feed Access     | Article collection |
+| Google Drive OAuth2 | Asset storage      |
+| Telegram Bot API    | Notifications      |
+| n8n Instance        | Workflow execution |
+
+---
+
+# ⚙️ Setup Guide
+
+## 1. Configure RSS Feed
+
+Add RSS sources:
+
+```text
+Technology News
+
+Industry Blogs
+
+Trending Topics
+```
+
+Test article retrieval.
+
+---
+
+## 2. Configure Google Gemini AI
+
+Create Gemini API credentials.
+
+Required:
+
+```text
+Google AI API Key
+
+Gemini Model Access
+```
+
+Test AI responses.
+
+---
+
+## 3. Configure Google Drive
+
+Create folders:
+
+```text
+AI Content Factory
+
+├── Blog Images
+
+├── Social Media Assets
+
+└── Generated Content
+```
+
+Connect Google Drive OAuth2.
+
+---
+
+## 4. Configure Telegram Bot
+
+Steps:
+
+1. Create bot using BotFather
+2. Copy bot token
+3. Add Telegram credentials in n8n
+4. Configure chat ID
+
+---
+
+## 5. Import Workflow
+
+Import:
+
+```text
+workflow.json
+```
+
+Configure:
+
+* RSS Feed
+* Gemini AI
 * Google Drive
-* Telegram Bot API
-* Facebook API (Optional)
-* LinkedIn API (Optional)
-* WordPress API (Optional)
+* Telegram
+
+Activate workflow.
 
 ---
 
-## 📁 Repository Structure
+# 🧪 Testing Checklist
+
+| Test Case             | Expected Result       |
+| --------------------- | --------------------- |
+| Schedule Trigger runs | Workflow starts       |
+| RSS retrieves article | Data collected        |
+| AI Research executes  | Research generated    |
+| Blog Writer runs      | Article created       |
+| Image generation runs | Cover image created   |
+| Google Drive updates  | Asset stored          |
+| Social generator runs | Posts created         |
+| Workflow completes    | Content package ready |
+
+---
+
+# 📁 Repository Structure
 
 ```text
 AI-Content-Factory/
+
 │
 ├── README.md
+│
 ├── workflow.json
 │
 ├── screenshots/
+│   │
 │   ├── workflow.png
+│   ├── rss-feed.png
 │   ├── ai-research-agent.png
 │   ├── ai-blog-writer.png
 │   ├── image-generation.png
@@ -178,65 +513,112 @@ AI-Content-Factory/
 
 ---
 
-## 📸 Screenshots
+# 📸 Screenshots
 
-Include the following screenshots:
+Recommended screenshots:
 
-* Complete Workflow
-* AI Research Agent
-* AI Blog Writer
+* Complete workflow
+* RSS Feed execution
+* AI Research output
+* AI Blog Writer result
+* Generated image
+* Google Drive storage
+* Social media output
+* Workflow execution
+
+---
+
+# 🚀 Future Improvements
+
+| Feature             | Implementation              |
+| ------------------- | --------------------------- |
+| Auto Publishing     | WordPress integration       |
+| AI SEO Optimization | Keyword analysis            |
+| Content Calendar    | Automated scheduling        |
+| Analytics Tracking  | Performance monitoring      |
+| More AI Models      | OpenAI / Claude integration |
+| Video Generation    | AI video workflows          |
+| Newsletter Creation | Email automation            |
+
+---
+
+# 🎓 Skills Applied
+
+## Automation
+
+* n8n Workflow Automation
+* Event-driven workflows
+* Multi-step automation pipelines
+
+## Artificial Intelligence
+
+* Google Gemini AI
+* Prompt Engineering
+* AI Content Generation
 * AI Image Generation
-* Google Drive Upload
-* Social Media Output
-* Workflow Execution
+
+## APIs
+
+* RSS Feed Integration
+* Google Drive API
+* Telegram Bot API
+* Social Media APIs
+
+## Programming
+
+* JavaScript
+* JSON Processing
+* Data Transformation
+* Workflow Logic
+
+## Business Automation
+
+* Content marketing automation
+* Digital asset management
+* AI productivity systems
 
 ---
 
-## 🚀 Key Features
+# 📚 Learning Objectives
 
-* ✅ Automated Content Discovery
-* ✅ AI-Powered Research
-* ✅ SEO Blog Generation
-* ✅ AI Image Generation
-* ✅ Multi-Platform Social Media Content
-* ✅ Google Drive Integration
-* ✅ Automated Content Distribution
-* ✅ End-to-End Workflow Automation
+This project demonstrates:
 
----
-
-## 🎓 Lessons Learned
-
-Through this project, I gained experience in:
-
-* Building end-to-end AI automation workflows
-* Integrating multiple AI services with n8n
-* Automating SEO-focused content creation
-* Designing multi-step workflow pipelines
+* Building advanced AI automation workflows
+* Integrating multiple APIs with n8n
+* Creating automated content pipelines
 * Managing AI-generated assets
-* Automating multi-platform content distribution
+* Designing scalable business automation systems
 
 ---
 
-## 📈 Impact
+# 🙌 Acknowledgements
 
-This workflow transforms a single trending article into a complete content package, dramatically reducing manual effort while maintaining a consistent content publishing process. It demonstrates how AI and workflow automation can streamline modern content marketing operations.
-
----
-
-## 📜 License
-
-MIT License
+* n8n
+* Google Gemini AI
+* Google Drive API
+* RSS Feed Technology
+* Telegram Bot API
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 **Belio C. Sinangote**
 
 BS Information Technology Student
 Cebu Technological University (CTU)
 
-GitHub: [https://github.com/belioautomation](https://github.com/belioautomation)
+GitHub:
 
-This project is part of my **30-Day n8n Automation Portfolio**, showcasing practical workflow automation using n8n, AI, APIs, and automation best practices.
+[https://github.com/belioautomation](https://github.com/belioautomation)
+
+This project is part of my **30-Day n8n Automation Portfolio**, showcasing practical automation solutions using **n8n, AI integrations, APIs, and business workflow automation**.
+
+---
+
+# 📄 License
+
+MIT License
+
+```
+```

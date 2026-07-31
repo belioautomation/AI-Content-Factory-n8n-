@@ -93,8 +93,6 @@ Telegram Notification
 
 # 📸 Workflow Screenshot
 
-> Replace this section with your workflow image.
-
 ![Workflow](Workflow%20Image)
 
 ---

@@ -125,8 +125,8 @@ Telegram Notification
 AI-Content-Factory/
 
 ├── README.md
-├── AI Content Factory.json
-├── Workflow Image
+├── workflow.json
+├── workflow.png
 └── LICENSE
 ```
 
